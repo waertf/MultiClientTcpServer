@@ -34,9 +34,15 @@ void MultiClientServer::readyRead()
     QTcpSocket *client = qobject_cast<QTcpSocket *>(sender());
        if (!client)
            return;
-       while (client->bytesAvailable()) {
-           QString receive=client->readAll();
-           qDebug()<<receive;
+
+       if (client->bytesAvailable()) {
+           //QByteArray length;
+           QString receivelength=client->read(4);
+           quint32 length= receivelength.toUInt();
+           qDebug()<<length;
+           QString receiveMsg=client->read(length);
+           qDebug()<<receiveMsg;
+
        }
 }
 void MultiClientServer::clientDisconnected()
